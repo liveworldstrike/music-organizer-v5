@@ -15,6 +15,9 @@ public class MusicOrganizer
     private MusicPlayer player;
     // A reader that can read music files and load them as tracks.
     private TrackReader reader;
+    //para saber si una cancion es completa o no 
+    private boolean saberCompleta;
+
 
     /**
      * Create a MusicOrganizer
@@ -24,9 +27,11 @@ public class MusicOrganizer
         tracks = new ArrayList<Track>();
         player = new MusicPlayer();
         reader = new TrackReader();
+        saberCompleta = false;
         readLibrary("audio");
         System.out.println("Music library loaded. " + getNumberOfTracks() + " tracks.");
         System.out.println();
+        
     }
     
     /**
@@ -51,9 +56,11 @@ public class MusicOrganizer
      * Play a track in the collection.
      * @param index The index of the track to be played.
      */
-    public void playTrack(int index)
+    public void playTrack(int index,boolean saberCompleta1)
     {
         if(indexValid(index)) {
+            saberCompleta = saberCompleta1;
+            isPlaying();
             Track track = tracks.get(index);
             player.startPlaying(track.getFilename());
             System.out.println("Now playing: " + track.getArtist() + " - " + track.getTitle());
@@ -121,9 +128,11 @@ public class MusicOrganizer
     /**
      * Play the first track in the collection, if there is one.
      */
-    public void playFirst()
+    public void playFirst(boolean saberCompleta1)
     {
+        saberCompleta = saberCompleta1;
         if(tracks.size() > 0) {
+            isPlaying();
             player.startPlaying(tracks.get(0).getFilename());
             tracks.get(0).incrementCount();
         }
@@ -184,6 +193,21 @@ public class MusicOrganizer
             }
         }
     
+    }
+    
+    /**
+     * metodo que muestra por pantalla si se esta reproduciendo una cancion completa 
+     * 
+     */
+    public void isPlaying()
+    {
+        if (saberCompleta){
+            System.out.println("la cancion que se esta reproduciendo es completa ");
+        }
+        else{
+            System.out.println("la cancion que se esta reproduciendo es no completa ");
+        }
+        
     }
     
 }

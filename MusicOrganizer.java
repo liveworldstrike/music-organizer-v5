@@ -18,6 +18,8 @@ public class MusicOrganizer
     private TrackReader reader;
     //para saber si una cancion es completa o no 
     private boolean saberCompleta;
+    //guarda si la cancion esta reproduciendose
+    private boolean repruOk;
 
     /**
      * Create a MusicOrganizer
@@ -28,6 +30,7 @@ public class MusicOrganizer
         player = new MusicPlayer();
         reader = new TrackReader();
         saberCompleta = false;
+        repruOk = false;
         readLibrary("audio");
         System.out.println("Music library loaded. " + getNumberOfTracks() + " tracks.");
         System.out.println();
@@ -61,10 +64,16 @@ public class MusicOrganizer
         if(indexValid(index)) {
             saberCompleta = saberCompleta1;
             isPlaying();
-            Track track = tracks.get(index);
-            player.startPlaying(track.getFilename());
-            System.out.println("Now playing: " + track.getArtist() + " - " + track.getTitle());
-            track.incrementCount();
+            if(!repruOk){
+                Track track = tracks.get(index);
+                player.startPlaying(track.getFilename());
+                System.out.println("Now playing: " + track.getArtist() + " - " + track.getTitle());
+                track.incrementCount();
+                repruOk = true;
+            }
+            else{
+                System.out.println("La cancion esta reproduciendose");
+            }
         }
     }
 
@@ -144,6 +153,7 @@ public class MusicOrganizer
     public void stopPlaying()
     {
         player.stop();
+        repruOk = false;
     }
 
     /**
@@ -223,7 +233,8 @@ public class MusicOrganizer
     }
 
     /**
-     * 
+     * metodo para eliminar una cancion segun el artista 
+     *
      */
     public void removeByArtist(String artist)
     {
@@ -231,6 +242,20 @@ public class MusicOrganizer
         while (it.hasNext()){
             Track guarda = it.next();
             if (guarda.getArtist().contains(artist)){
+                it.remove();
+            }
+        }
+    }
+
+    /**
+     * metodo para eliminar una cancion segun el titulo
+     */
+    public void removeByTitle(String title)
+    {
+        Iterator<Track> it = tracks.iterator();
+        while (it.hasNext()){
+            Track guarda = it.next();
+            if (guarda.getTitle().contains(title)){
                 it.remove();
             }
         }

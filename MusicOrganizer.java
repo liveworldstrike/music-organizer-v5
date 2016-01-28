@@ -262,7 +262,7 @@ public class MusicOrganizer
             }
         }
     }
-    
+
     /**
      * metodo para que reproducca una cacion aleatoria 
      */
@@ -271,20 +271,49 @@ public class MusicOrganizer
         Random cualquiera = new Random();
         int numeroIntroducido = cualquiera.nextInt(tracks.size());
         playTrack(numeroIntroducido,true);
-        
+
     }
-    
+
     /**
      * metodo para reproducir el arraylist aleatoriamente y solo unos segundos,incrementar el contador de cada cancion,mostrar todos los detalles de cada cancion
      */
     public void playShuffle()
     {
+        //nuevo 
         Collections.shuffle(tracks);
         for (Track track : tracks){
             track.incrementCount();
             System.out.println(track.getDetails());
+            //para que se reprodu solo unos segundos (de un metodo de musicplayer)
             player.playSample(track.getFilename());
         }
+
+    }
+
+    /**
+     * 
+     */
+    public void playshuffle2()
+    {
+        ArrayList<Track> copia = new ArrayList<>();
+        copia = (ArrayList)tracks.clone();
+
+        int  cancionesReproducidas = 0;
+        while(cancionesReproducidas < tracks.size()){
+            Random cualquiera = new Random();
+            int numeroIntroducido = cualquiera.nextInt(copia.size());
+            
+            Track track = copia.get( numeroIntroducido);
+            
+            track.incrementCount();
+            System.out.println(track.getDetails());
+            //para que se reprodu solo unos segundos (de un metodo de musicplayer)
+            player.playSample(track.getFilename());
+            //borramos la copia
+            copia.remove(numeroIntroducido);
+            cancionesReproducidas = cancionesReproducidas + 1;
+        }
+
         
     }
 }
